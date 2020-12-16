@@ -39,7 +39,7 @@ POST `localhost:3000/api/login` and pass the following objects in the request bo
 }
 ```
 ### Note
-Keep in mind that MondoDB doesn't like passwords that contains special chracters like `@` and `?`. You will definitely get an `undifined uri` error if it is.
+Keep in mind that MondoDB doesn't like passwords that contains special chracters like `@` and `?`. You will definitely get an `undefined uri` error if it is.
 
 License
 ----

@@ -1,3 +1,4 @@
 # Untrack files and folders
 .env
 node_modules
+frontend
