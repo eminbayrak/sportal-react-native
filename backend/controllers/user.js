@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require("../models/user.js");
+const config = require("../../backend/config/config")
 require('dotenv').config();
 
 exports.register = async (req, res) => {
@@ -23,7 +24,7 @@ exports.register = async (req, res) => {
             const token = jwt.sign(payload, process.env.TOKEN_SECRET);
             res.status(200).send({ token })
         }
-    })
+    });
 }
 
 exports.login = async (req, res) => {
@@ -36,14 +37,34 @@ exports.login = async (req, res) => {
                 if (!validPass) return res.status(401).send("Password is wrong.");
                 // Create and assign token
                 let payload = { id: user._id, user_type_id: user.user_type_id };
-                const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-                res.status(200).header("auth-token", token).send({ "token": token });
+                const token = jwt.sign(payload, process.env.TOKEN_SECRET, { expiresIn: config.TOKEN.tokenLife });
+                const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: config.TOKEN.refreshTokenLife });
+                const response = {
+                    "status": "LoggedIn",
+                    "token": token,
+                    "refreshToken": refreshToken,
+                }
+                return res.status(200).header("auth-token", response).send({ "token": response });
             }
             else {
-                res.status(401).send('Invalid user.');
+                return res.status(401).send('Invalid user.');
             }
         }
-    })
+    });
+}
+
+exports.test = (req, res) => {
+    let events = [{
+        "_id": "1",
+        "name": "Auto Expo",
+        "description": "lorem ipsum",
+        "date": "2012-04-23T18:25:43.511"
+    }];
+
+    return res.status(200).json({
+        status: 'success',
+        data: events,
+    });
 }
 
 // Access auth users only

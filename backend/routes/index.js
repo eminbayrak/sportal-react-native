@@ -14,4 +14,7 @@ router.post('/events', verifyUserToken, isUser, userController.userEvent);
 // Auth admin
 router.post('/special', verifyUserToken, isAdmin, userController.adminEvent);
 
+// Test
+router.get('/test', userController.test);
+
 module.exports = router;

@@ -23,11 +23,15 @@ connection.once("open", () => {
 app.use(bodyParser.urlencoded({ extended: false }))
 // Parse application/json
 app.use(bodyParser.json());
-
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+})
 // Middleware routes
 app.use('/api', authRoute);
 app.use(cors());
 app.use(express.json());
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`App is running on port: ${port}`);
 });
